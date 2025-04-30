@@ -27,6 +27,7 @@ const intervallSettings = {
 	Meter: 7 * 60000,
 	Plug: 30 * 60000,
 	SmartFan: 30 * 60000,
+	SmartLockPro: 5 * 60000,
 };
 
 class SwitchbotHub extends utils.Adapter {
@@ -68,6 +69,7 @@ class SwitchbotHub extends utils.Adapter {
 		intervallSettings.Meter = this.config.intervallMeter != null ? this.config.intervallMeter * 60000 || intervallSettings.Meter : intervallSettings.Meter;
 		intervallSettings.Plug = this.config.intervallPlug != null ? this.config.intervallPlug * 60000 || intervallSettings.Plug : intervallSettings.Plug;
 		intervallSettings.SmartFan = this.config.intervallSmartFan != null ? this.config.intervallSmartFan * 60000 || intervallSettings.SmartFan : intervallSettings.SmartFan;
+		intervallSettings.SmartLockPro = this.config.intervallSmartLockPro != null ? this.config.intervallSmartLockPro * 60000 || intervallSettings.SmartLockPro : intervallSettings.SmartLockPro;
 
 		// Request devices, create related objects and get all values
 		try {
@@ -139,6 +141,9 @@ class SwitchbotHub extends utils.Adapter {
 					break;
 				case ('Smart Fan'):
 					timeInMs = intervallSettings.SmartFan;
+					break;
+				case ('Smart Lock Pro'):
+					timeInMs = intervallSettings.SmartLockPro;
 					break;
 			}
 			this.devices[deviceId].intervallTimer = timeInMs;
@@ -606,6 +611,11 @@ class SwitchbotHub extends utils.Adapter {
 
 						case ('Smart Fan'):
 							//ToDo: add proper definitions and values
+							break;
+
+						case ('Smart Lock Pro'):
+							apiData.command = `lockState`;
+							apiData.parameter = `${state.val}`;
 							break;
 
 						default:
